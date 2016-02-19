@@ -1,5 +1,6 @@
 package innoday.echostar.com.echopath;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
@@ -39,11 +40,11 @@ public class MainActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
-                Spinner fromSpinner =(Spinner) findViewById(R.id.from);
-                Spinner toSpinner =(Spinner) findViewById(R.id.to);
+                Spinner fromSpinner = (Spinner) findViewById(R.id.from);
+                Spinner toSpinner = (Spinner) findViewById(R.id.to);
 
-                Location fromLocation = (Location)fromSpinner.getSelectedItem();
-                Location toLocation = (Location)toSpinner.getSelectedItem();
+                Location fromLocation = (Location) fromSpinner.getSelectedItem();
+                Location toLocation = (Location) toSpinner.getSelectedItem();
 
                 new ShortestDistanceTask(fromLocation, toLocation).execute();
             }
@@ -56,6 +57,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         new HttpRequestTask().execute();
+    }
+
+    public void onShowMap(View v){
+        if (v.getId() == R.id.showMap){
+            Intent i = new Intent(MainActivity.this, MapActivity.class);
+            startActivity(i);
+        }
     }
 
     public void setAdaptor(List<Location> items){
