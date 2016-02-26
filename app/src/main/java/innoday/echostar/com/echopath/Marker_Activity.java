@@ -17,7 +17,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 public class Marker_Activity extends Fragment {
     GoogleMap googleMap;
-    private static final LatLng Echostar = new LatLng(10,20);
+    private static final LatLng Echostar = new LatLng(39.575353,-104.864334);
 
     public void processMap(View v){
         if(googleMap == null){
@@ -25,14 +25,14 @@ public class Marker_Activity extends Fragment {
         }
 
         if(googleMap != null){
-            googleMap.addMarker(new MarkerOptions().position(Echostar).title("This is the marked area"));
+            googleMap.addMarker(new MarkerOptions().position(Echostar).title("EchoStar"));
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(Echostar,100));
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.map_activity, container, false);
+        View v = inflater.inflate(R.layout.map_fragment_layout, container, false);
         processMap(v);
         return v;
     }
