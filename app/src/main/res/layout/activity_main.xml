@@ -38,18 +38,28 @@
             android:id="@+id/find"
             android:layout_gravity="center_horizontal" />
 
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Show Map"
+            android:id="@+id/showMap"
+            android:layout_gravity="center_horizontal"
+            android:onClick="onShowMap" />
+
         <TableLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="0.23"
             android:orientation="vertical"
-            android:id="@+id/table"></TableLayout>
+            android:id="@+id/table">
 
-        <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-            android:name="com.google.android.gms.maps.MapFragment"
-            android:id="@+id/map"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            </TableRow>
+        </TableLayout>
 
     </LinearLayout>
 </RelativeLayout>
