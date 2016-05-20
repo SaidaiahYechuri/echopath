@@ -20,18 +20,23 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import java.util.ArrayList;
 
 public class Marker_Activity extends Fragment {
+    public static Marker_Activity newInstance(Bundle b) {
+        Marker_Activity marker_fragment = new Marker_Activity();
+        marker_fragment.setArguments(b);
+        return marker_fragment;
+    }
+
     ArrayList<LatLng> locations = new ArrayList();
+    Bundle b = null;
     GoogleMap googleMap;
 
     public void processMap(View v){
         if(googleMap == null){
             googleMap = ((MapFragment) getChildFragmentManager().findFragmentById(R.id.map)).getMap();
         }
-
+        locations = b.getParcelableArrayList("locations");
+        System.out.print(locations);
         if(googleMap != null){
-            locations.add(new LatLng(39.575353, -104.864334));
-            locations.add(new LatLng(39.575350, -104.864309));
-            locations.add(new LatLng(39.575322, -104.864273));
             for(LatLng location: locations){
                 googleMap.addMarker(new MarkerOptions().position(location).title("EchoStar"));
                 googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 100));
@@ -49,10 +54,10 @@ public class Marker_Activity extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        b = getArguments();
         View v = inflater.inflate(R.layout.map_fragment_layout, container, false);
         processMap(v);
         return v;
     }
 }
-
 

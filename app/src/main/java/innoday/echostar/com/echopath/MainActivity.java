@@ -32,7 +32,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -42,10 +42,13 @@ public class MainActivity extends AppCompatActivity {
 
                 Spinner fromSpinner = (Spinner) findViewById(R.id.from);
                 Spinner toSpinner = (Spinner) findViewById(R.id.to);
-
                 Location fromLocation = (Location) fromSpinner.getSelectedItem();
                 Location toLocation = (Location) toSpinner.getSelectedItem();
 
+                Intent i = new Intent(MainActivity.this, MapActivity.class);
+                i.putExtra("lat", "test1");
+                i.putExtra("lon", "test2");
+                startActivity(i);
                 new ShortestDistanceTask(fromLocation, toLocation).execute();
             }
         });
