@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
                 i.putExtra("lon", "test2");
                 startActivity(i);
                 new ShortestDistanceTask(fromLocation, toLocation).execute();
+
             }
         });
 
@@ -85,6 +86,7 @@ public class MainActivity extends AppCompatActivity {
         protected LocationsDTO doInBackground(Void... params) {
             try {
                 final String url = "http://10.79.85.86:8080/echopath/location/locations";
+
                 RestTemplate restTemplate = new RestTemplate();
                 restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
                 LocationsDTO locationsDTO = restTemplate.getForObject(url, LocationsDTO.class);
@@ -109,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public class ShortestDistanceTask extends AsyncTask<Void, Void, ShortestPathDTO> {
+    public class ShortestDistanceTask extends AsyncTask<Void, Void, TempShortestPath> {
 
         private static final String BASE_URL = "http://10.79.85.86:8080/echopath/location/";
 
@@ -119,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
         private  Location toLocation;
 
 
-        private ShortestPathDTO shortestPathDTO = new ShortestPathDTO();
+        private TempShortestPath shortestPathDTO = new TempShortestPath();
 
 
         public ShortestDistanceTask(Location fromLocation, Location toLocation){
@@ -128,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
-        protected ShortestPathDTO doInBackground(Void... params) {
+        protected TempShortestPath doInBackground(Void... params) {
             try {
 
 
@@ -139,33 +141,33 @@ public class MainActivity extends AppCompatActivity {
                 if (fromLocation != null && toLocation != null) {
                     shortestPathDTO = restOperations.getForObject(BASE_URL
                             + "shortestPath?fromID=" + fromLocation.getId() + "&toID="
-                            + toLocation.getId(), ShortestPathDTO.class);
+                            + toLocation.getId(), TempShortestPath.class);
 
-                    if(shortestPathDTO.getMinDistance() == Double.POSITIVE_INFINITY){
+                    if(shortestPathDTO.getTotalDistance() == Double.POSITIVE_INFINITY){
                         shortestPathDTO = restOperations.getForObject(BASE_URL
                                 + "shortestPath?fromID=" + toLocation.getId() + "&toID="
-                                + fromLocation.getId(), ShortestPathDTO.class);
-                        Collections.reverse(shortestPathDTO.getLocations());
+                                + fromLocation.getId(), TempShortestPath.class);
+                        Collections.reverse(shortestPathDTO.getEdgeDTOs());
 
-                        double sum = shortestPathDTO.getMinDistance();
+                        double sum = shortestPathDTO.getTotalDistance();
 
-                        for(Location location : shortestPathDTO.getLocations()){
-                            location.setMinDistance(sum - location.getMinDistance());
+                        for(EdgeDTO edgeDTO : shortestPathDTO.getEdgeDTOs()){
+                            edgeDTO.setDistance(sum - edgeDTO.getDistance());
                         }
-                        if(shortestPathDTO.getLocations().size() > 0){
-                            shortestPathDTO.getLocations().get(0).setMinDistance(0);
+                        if(shortestPathDTO.getEdgeDTOs().size() > 0){
+                            shortestPathDTO.getEdgeDTOs().get(0).setDistance(0);
                         }
                     }
                 }
 
-                Location previousLocation = null;
+                EdgeDTO previousLocation = null;
                 double tempSum = 0 ;
 
-                for(Location location : shortestPathDTO.getLocations()){
+                for(EdgeDTO location : shortestPathDTO.getEdgeDTOs()){
 
                     if(previousLocation != null){
-                        tempSum = tempSum + previousLocation.getMinDistance();
-                        location.setMinDistance(location.getMinDistance() - tempSum);
+                        tempSum = tempSum + previousLocation.getDistance();
+                        location.setDistance(location.getDistance() - tempSum);
                     }
                     previousLocation = location;
                 }
@@ -179,14 +181,14 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
-        protected void onPostExecute(ShortestPathDTO shortestPathDTO) {
+        protected void onPostExecute(TempShortestPath shortestPathDTO) {
 
            setDistances(shortestPathDTO);
 
         }
     }
 
-    public void setDistances(ShortestPathDTO shortestPathDTO){
+    public void setDistances(TempShortestPath shortestPathDTO){
 
         TableLayout tableLayout = (TableLayout) findViewById(R.id.table);
 
@@ -194,7 +196,7 @@ public class MainActivity extends AppCompatActivity {
 
         tableLayout.setPadding(15, 3, 15, 3);
 
-        for(Location location : shortestPathDTO.getLocations()){
+        for(EdgeDTO location : shortestPathDTO.getEdgeDTOs()){
             TableRow row = new TableRow(this);
             TableLayout.LayoutParams lp = new TableLayout.LayoutParams(
                     TableLayout.LayoutParams.FILL_PARENT,
@@ -211,7 +213,7 @@ public class MainActivity extends AppCompatActivity {
             Values.setTextSize(25.0f);
             Values.setTextColor(Color.parseColor("#FFFFFF"));
             Values.setTypeface(null, Typeface.BOLD);
-            Values.setText(location.getName());
+            Values.setText(location.getFrom());
             row.addView(Values);
 
             TextView Values1 = new TextView(this);
@@ -220,7 +222,7 @@ public class MainActivity extends AppCompatActivity {
             Values1.setTextSize(25.0f);
             Values1.setTextColor(Color.parseColor("#FFFFFF"));
             Values1.setTypeface(null, Typeface.BOLD);
-            Values1.setText(String.valueOf(location.getMinDistance()));
+            Values1.setText(String.valueOf(location.getDistance()));
             row.addView(Values1);
 
             tableLayout.addView(row);
