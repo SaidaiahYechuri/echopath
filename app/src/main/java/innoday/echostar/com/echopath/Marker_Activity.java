@@ -34,7 +34,7 @@ public class Marker_Activity extends Fragment {
         if(googleMap == null){
             googleMap = ((MapFragment) getChildFragmentManager().findFragmentById(R.id.map)).getMap();
         }
-        locations = b.getParcelableArrayList("locations");
+        locations = b.getParcelableArrayList("meetingRoomLocationsBundle");
         System.out.print(locations);
         if(googleMap != null){
             for(LatLng location: locations){

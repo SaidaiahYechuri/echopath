@@ -23,12 +23,12 @@ public class MapActivity extends AppCompatActivity {
 
         //Get the values from main activity. This code is not reqd.
         Bundle extra = getIntent().getExtras();
-        ArrayList<LatLng> locs = extra.getParcelableArrayList("meetingRoomLocationsIntent");
+        ArrayList<LatLng> meetingRoomLocations = extra.getParcelableArrayList("meetingRoomLocationsIntent");
 
         setContentView(R.layout.map_activity);
 
         Bundle bundle = new Bundle();
-        bundle.putParcelableArrayList("locations", locs);
+        bundle.putParcelableArrayList("meetingRoomLocationsBundle", meetingRoomLocations);
         Marker_Activity ma = Marker_Activity.newInstance(bundle);
 
 
