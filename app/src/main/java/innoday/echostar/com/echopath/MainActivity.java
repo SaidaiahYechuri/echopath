@@ -17,6 +17,8 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
@@ -30,7 +32,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-
+    List<Location> meetingRoomInfo  = new ArrayList<Location>();
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,11 +46,6 @@ public class MainActivity extends AppCompatActivity {
                 Spinner toSpinner = (Spinner) findViewById(R.id.to);
                 Location fromLocation = (Location) fromSpinner.getSelectedItem();
                 Location toLocation = (Location) toSpinner.getSelectedItem();
-
-                Intent i = new Intent(MainActivity.this, MapActivity.class);
-                i.putExtra("lat", "test1");
-                i.putExtra("lon", "test2");
-                startActivity(i);
                 new ShortestDistanceTask(fromLocation, toLocation).execute();
 
             }
@@ -99,14 +96,10 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(LocationsDTO locationsDTO) {
-
-
-            List<Location> items  = new ArrayList<Location>();
-
             for(Location location : locationsDTO.getLocations()){
-                items.add(location);
+                meetingRoomInfo.add(location);
             }
-            setAdaptor(items);
+            setAdaptor(meetingRoomInfo);
         }
 
     }
@@ -196,7 +189,8 @@ public class MainActivity extends AppCompatActivity {
 
         tableLayout.setPadding(15, 3, 15, 3);
 
-        for(EdgeDTO location : shortestPathDTO.getEdgeDTOs()){
+        List<EdgeDTO> edgeDtoMeetingRoomDirections = shortestPathDTO.getEdgeDTOs();
+        for(EdgeDTO location : edgeDtoMeetingRoomDirections){
             TableRow row = new TableRow(this);
             TableLayout.LayoutParams lp = new TableLayout.LayoutParams(
                     TableLayout.LayoutParams.FILL_PARENT,
@@ -226,7 +220,25 @@ public class MainActivity extends AppCompatActivity {
             row.addView(Values1);
 
             tableLayout.addView(row);
+            sendInfoToMapActivity(edgeDtoMeetingRoomDirections);
         }
+    }
+
+    public void sendInfoToMapActivity(List<EdgeDTO> edgeDtoMeetingRoomDirections){
+        ArrayList<LatLng> meetingRoomLocations = new ArrayList();
+        for(EdgeDTO edgeDtoMeetingRoom : edgeDtoMeetingRoomDirections){
+            String fromMeetingRoom = edgeDtoMeetingRoom.getFrom();
+            for(Location meetingRoom : meetingRoomInfo){
+                if (meetingRoom.getName().equals(fromMeetingRoom)){
+                    meetingRoomLocations.add(new LatLng(meetingRoom.getLatitude(), meetingRoom.getLongitude()));
+                }
+            }
+        }
+
+
+        Intent i = new Intent(MainActivity.this, MapActivity.class);
+        i.putParcelableArrayListExtra("meetingRoomLocationsIntent", meetingRoomLocations);
+        startActivity(i);
     }
 
 }

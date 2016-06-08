@@ -39,7 +39,7 @@ public class Marker_Activity extends Fragment {
         if(googleMap != null){
             for(LatLng location: locations){
                 googleMap.addMarker(new MarkerOptions().position(location).title("EchoStar"));
-                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 100));
+                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 5));
             }
             // Instantiating the class PolylineOptions to plot polyline in the map
             PolylineOptions polylineOptions = new PolylineOptions();
