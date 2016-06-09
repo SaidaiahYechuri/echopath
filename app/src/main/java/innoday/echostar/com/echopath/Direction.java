@@ -8,12 +8,12 @@ package innoday.echostar.com.echopath;
  */
 public enum Direction {
 
-    NORTH,
+    RIGHT,
 
-    SOUTH,
+    LEFT,
 
-    EAST,
+    FRONT,
 
-    WEST;
+    BACK;
 }
 
