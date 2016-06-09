@@ -228,8 +228,12 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<LatLng> meetingRoomLocations = new ArrayList();
         for(EdgeDTO edgeDtoMeetingRoom : edgeDtoMeetingRoomDirections){
             String fromMeetingRoom = edgeDtoMeetingRoom.getFrom();
+            String toMeetingRoom = edgeDtoMeetingRoom.getTo();
             for(Location meetingRoom : meetingRoomInfo){
                 if (meetingRoom.getName().equals(fromMeetingRoom)){
+                    meetingRoomLocations.add(new LatLng(meetingRoom.getLatitude(), meetingRoom.getLongitude()));
+                }
+                if (meetingRoom.getName().equals(toMeetingRoom)){
                     meetingRoomLocations.add(new LatLng(meetingRoom.getLatitude(), meetingRoom.getLongitude()));
                 }
             }
