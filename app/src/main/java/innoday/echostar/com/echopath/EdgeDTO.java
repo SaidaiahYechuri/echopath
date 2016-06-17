@@ -14,6 +14,15 @@ public class EdgeDTO {
 	
 	private String face;
 
+	double toLatitude;
+
+	double toLongitude;
+
+	double fromLatitude;
+
+	double fromLongitude;
+
+
 	/**
 	 * Constructor
 	 */
@@ -29,7 +38,39 @@ public class EdgeDTO {
 		// TODO Auto-generated constructor stub
 	}
 
-	/**
+	public double getToLatitude() {
+		return toLatitude;
+	}
+
+	public void setToLatitude(double toLatitude) {
+		this.toLatitude = toLatitude;
+	}
+
+    public double getToLongitude() {
+        return toLongitude;
+    }
+
+    public void setToLongitude(double toLongitude) {
+        this.toLongitude = toLongitude;
+    }
+
+    public double getFromLatitude() {
+        return fromLatitude;
+    }
+
+    public void setFromLatitude(double fromLatitude) {
+        this.fromLatitude = fromLatitude;
+    }
+
+    public double getFromLongitude() {
+        return fromLongitude;
+    }
+
+    public void setFromLongitude(double fromLongitude) {
+        this.fromLongitude = fromLongitude;
+    }
+
+    /**
 	 * Get the value of from of this EdgeDTO	
 	 * @return the from
 	 */

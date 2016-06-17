@@ -227,19 +227,9 @@ public class MainActivity extends AppCompatActivity {
     public void sendInfoToMapActivity(List<EdgeDTO> edgeDtoMeetingRoomDirections){
         ArrayList<LatLng> meetingRoomLocations = new ArrayList();
         for(EdgeDTO edgeDtoMeetingRoom : edgeDtoMeetingRoomDirections){
-            String fromMeetingRoom = edgeDtoMeetingRoom.getFrom();
-            String toMeetingRoom = edgeDtoMeetingRoom.getTo();
-            for(Location meetingRoom : meetingRoomInfo){
-                if (meetingRoom.getName().equals(fromMeetingRoom)){
-                    meetingRoomLocations.add(new LatLng(meetingRoom.getLatitude(), meetingRoom.getLongitude()));
-                }
-                if (meetingRoom.getName().equals(toMeetingRoom)){
-                    meetingRoomLocations.add(new LatLng(meetingRoom.getLatitude(), meetingRoom.getLongitude()));
-                }
-            }
+            meetingRoomLocations.add(new LatLng(edgeDtoMeetingRoom.fromLatitude, edgeDtoMeetingRoom.fromLongitude));
+            meetingRoomLocations.add(new LatLng(edgeDtoMeetingRoom.toLatitude, edgeDtoMeetingRoom.toLongitude));
         }
-
-
         Intent i = new Intent(MainActivity.this, MapActivity.class);
         i.putParcelableArrayListExtra("meetingRoomLocationsIntent", meetingRoomLocations);
         startActivity(i);
