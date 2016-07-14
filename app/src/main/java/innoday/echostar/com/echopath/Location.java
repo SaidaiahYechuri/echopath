@@ -19,6 +19,12 @@ public class Location
 
 	private String modified;
 
+    public Boolean getIntersection() {
+        return intersection;
+    }
+
+    private Boolean intersection;
+
 	private ConnectedLocations[] connectedLocations;
 
 	public String getId ()
