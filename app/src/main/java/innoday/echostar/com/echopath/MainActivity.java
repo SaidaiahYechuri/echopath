@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected LocationsDTO doInBackground(Void... params) {
             try {
-                final String url = "http://10.79.85.86:8080/echopath/location/locations";
+                final String url = "http://10.79.85.86:8080/echopath/location/locationsOnly";
 
                 RestTemplate restTemplate = new RestTemplate();
                 restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
@@ -91,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(LocationsDTO locationsDTO) {
+            meetingRoomInfo.clear();
             for(Location location : locationsDTO.getLocations()){
                 meetingRoomInfo.add(location);
             }
@@ -130,34 +131,6 @@ public class MainActivity extends AppCompatActivity {
                     shortestPathDTO = restOperations.getForObject(BASE_URL
                             + "shortestPath?fromID=" + fromLocation.getId() + "&toID="
                             + toLocation.getId(), TempShortestPath.class);
-
-                    if(shortestPathDTO.getTotalDistance() == Double.POSITIVE_INFINITY){
-                        shortestPathDTO = restOperations.getForObject(BASE_URL
-                                + "shortestPath?fromID=" + toLocation.getId() + "&toID="
-                                + fromLocation.getId(), TempShortestPath.class);
-                        Collections.reverse(shortestPathDTO.getEdgeDTOs());
-
-                        double sum = shortestPathDTO.getTotalDistance();
-
-                        for(EdgeDTO edgeDTO : shortestPathDTO.getEdgeDTOs()){
-                            edgeDTO.setDistance(sum - edgeDTO.getDistance());
-                        }
-                        if(shortestPathDTO.getEdgeDTOs().size() > 0){
-                            shortestPathDTO.getEdgeDTOs().get(0).setDistance(0);
-                        }
-                    }
-                }
-
-                EdgeDTO previousLocation = null;
-                double tempSum = 0 ;
-
-                for(EdgeDTO location : shortestPathDTO.getEdgeDTOs()){
-
-                    if(previousLocation != null){
-                        tempSum = tempSum + previousLocation.getDistance();
-                        location.setDistance(location.getDistance() - tempSum);
-                    }
-                    previousLocation = location;
                 }
 
             } catch (Throwable e) {

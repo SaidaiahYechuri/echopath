@@ -15,7 +15,8 @@
         android:layout_height="match_parent"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
-        android:weightSum="1">
+        android:weightSum="1"
+        android:background="#fbefeb">
 
         <Spinner
             android:layout_width="match_parent"
@@ -34,7 +35,7 @@
             style="?android:attr/buttonStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Find"
+            android:text="GO"
             android:id="@+id/find"
             android:layout_gravity="center_horizontal" />
 

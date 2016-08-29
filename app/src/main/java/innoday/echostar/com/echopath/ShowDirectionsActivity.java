@@ -36,11 +36,13 @@ public class ShowDirectionsActivity extends Activity{
         // Define scroll view
         ScrollView scroll = new ScrollView(this);
         scroll.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+        scroll.setBackgroundColor(Color.parseColor("#fbefeb"));
 
         // Define relative layout
         RelativeLayout layout = new RelativeLayout(this);
         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         layout.setLayoutParams(layoutParams);
+
 
         // Get json
         int json_len = myList.size();
