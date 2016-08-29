@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
+import android.os.Parcelable;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -19,12 +20,14 @@ import android.widget.TextView;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import org.json.JSONObject;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -41,7 +44,6 @@ public class MainActivity extends AppCompatActivity {
         final Button button = (Button) findViewById(R.id.find);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-
                 Spinner fromSpinner = (Spinner) findViewById(R.id.from);
                 Spinner toSpinner = (Spinner) findViewById(R.id.to);
                 Location fromLocation = (Location) fromSpinner.getSelectedItem();
@@ -58,13 +60,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         new HttpRequestTask().execute();
-    }
-
-    public void onShowMap(View v){
-        if (v.getId() == R.id.showMap){
-            Intent i = new Intent(MainActivity.this, MapActivity.class);
-            startActivity(i);
-        }
     }
 
     public void setAdaptor(List<Location> items){
@@ -175,64 +170,14 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(TempShortestPath shortestPathDTO) {
-
-           setDistances(shortestPathDTO);
-
+            ArrayList<EdgeDTO> edgeDtoMeetingRoomDirections = shortestPathDTO.getEdgeDTOs();
+            sendInfoToDirectionActivity(edgeDtoMeetingRoomDirections);
         }
     }
 
-    public void setDistances(TempShortestPath shortestPathDTO){
-
-        TableLayout tableLayout = (TableLayout) findViewById(R.id.table);
-
-        tableLayout.removeAllViews();
-
-        tableLayout.setPadding(15, 3, 15, 3);
-
-        List<EdgeDTO> edgeDtoMeetingRoomDirections = shortestPathDTO.getEdgeDTOs();
-        for(EdgeDTO location : edgeDtoMeetingRoomDirections){
-            TableRow row = new TableRow(this);
-            TableLayout.LayoutParams lp = new TableLayout.LayoutParams(
-                    TableLayout.LayoutParams.FILL_PARENT,
-                    TableLayout.LayoutParams.WRAP_CONTENT);
-            row.setLayoutParams(lp);
-
-            row.setPadding(15, 3, 15, 3);
-
-            row.setBackgroundColor(Color.parseColor("#E4CC91"));
-
-            TextView Values = new TextView(this);
-            Values.setPadding(15, 0, 15, 0);
-            Values.setGravity(Gravity.CENTER);
-            Values.setTextSize(25.0f);
-            Values.setTextColor(Color.parseColor("#FFFFFF"));
-            Values.setTypeface(null, Typeface.BOLD);
-            Values.setText(location.getFrom());
-            row.addView(Values);
-
-            TextView Values1 = new TextView(this);
-            Values1.setPadding(15, 0, 15, 0);
-            Values1.setGravity(Gravity.CENTER);
-            Values1.setTextSize(25.0f);
-            Values1.setTextColor(Color.parseColor("#FFFFFF"));
-            Values1.setTypeface(null, Typeface.BOLD);
-            Values1.setText(String.valueOf(location.getDistance()));
-            row.addView(Values1);
-
-            tableLayout.addView(row);
-            sendInfoToMapActivity(edgeDtoMeetingRoomDirections);
-        }
+    public void sendInfoToDirectionActivity(ArrayList<EdgeDTO> edgeDtoMeetingRoomDirections) {
+        Intent showDirectionsIntent = new Intent(MainActivity.this, ShowDirectionsActivity.class);
+        showDirectionsIntent.putExtra("meetingRoomLocationsIntent", edgeDtoMeetingRoomDirections);
+        startActivity(showDirectionsIntent);
     }
-
-    public void sendInfoToMapActivity(List<EdgeDTO> edgeDtoMeetingRoomDirections){
-        ArrayList<LatLng> meetingRoomLocations = new ArrayList();
-        for(EdgeDTO edgeDtoMeetingRoom : edgeDtoMeetingRoomDirections){
-            meetingRoomLocations.add(new LatLng(edgeDtoMeetingRoom.fromLatitude, edgeDtoMeetingRoom.fromLongitude));
-            meetingRoomLocations.add(new LatLng(edgeDtoMeetingRoom.toLatitude, edgeDtoMeetingRoom.toLongitude));
-        }
-        Intent i = new Intent(MainActivity.this, MapActivity.class);
-        i.putParcelableArrayListExtra("meetingRoomLocationsIntent", meetingRoomLocations);
-        startActivity(i);
-    }
-
 }

@@ -1,29 +1,24 @@
 package innoday.echostar.com.echopath;
 
 public class Location
-
 {
 	private String id;
 
-	private double minDistance;
+	private String face;
+
+	private String intersection;
+
+	private String minDistance;
 
 	private String created;
 
 	private String name;
 
-	private double longitude;
+	private String longitude;
 
-	private double latitude;
-
-	private String[] cLocations;
+	private String latitude;
 
 	private String modified;
-
-    public Boolean getIntersection() {
-        return intersection;
-    }
-
-    private Boolean intersection;
 
 	private ConnectedLocations[] connectedLocations;
 
@@ -37,12 +32,32 @@ public class Location
 		this.id = id;
 	}
 
-	public double getMinDistance ()
+	public String getFace ()
+{
+	return face;
+}
+
+	public void setFace (String face)
+	{
+		this.face = face;
+	}
+
+	public String getIntersection ()
+	{
+		return intersection;
+	}
+
+	public void setIntersection (String intersection)
+	{
+		this.intersection = intersection;
+	}
+
+	public String getMinDistance ()
 	{
 		return minDistance;
 	}
 
-	public void setMinDistance (double minDistance)
+	public void setMinDistance (String minDistance)
 	{
 		this.minDistance = minDistance;
 	}
@@ -67,34 +82,24 @@ public class Location
 		this.name = name;
 	}
 
-	public double getLongitude ()
+	public String getLongitude ()
 	{
 		return longitude;
 	}
 
-	public void setLongitude (double longitude)
+	public void setLongitude (String longitude)
 	{
 		this.longitude = longitude;
 	}
 
-	public double getLatitude ()
+	public String getLatitude ()
 	{
 		return latitude;
 	}
 
-	public void setLatitude (double latitude)
+	public void setLatitude (String latitude)
 	{
 		this.latitude = latitude;
-	}
-
-	public String[] getCLocations ()
-	{
-		return cLocations;
-	}
-
-	public void setCLocations (String[] cLocations)
-	{
-		this.cLocations = cLocations;
 	}
 
 	public String getModified ()
@@ -118,7 +123,7 @@ public class Location
 	}
 
 	@Override
-	public String toString()
+	public String  toString()
 	{
 		return name;
 	}

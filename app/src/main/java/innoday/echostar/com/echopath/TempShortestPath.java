@@ -11,7 +11,7 @@ public class TempShortestPath {
 
 	private double totalDistance;
 	
-	private List<EdgeDTO> edgeDTOs = new ArrayList<EdgeDTO>();
+	private ArrayList<EdgeDTO> edgeDTOs = new ArrayList<EdgeDTO>();
 
 	/**
 	 * Get the value of totalDistance of this TempShortestPath	
@@ -33,7 +33,7 @@ public class TempShortestPath {
 	 * Get the value of edgeDTOs of this TempShortestPath	
 	 * @return the edgeDTOs
 	 */
-	public List<EdgeDTO> getEdgeDTOs() {
+	public ArrayList<EdgeDTO> getEdgeDTOs() {
 		return edgeDTOs;
 	}
 
@@ -41,7 +41,7 @@ public class TempShortestPath {
 	 * Set value of edgeDTOs  
 	 * @param edgeDTOs the edgeDTOs to set
 	 */
-	public void setEdgeDTOs(List<EdgeDTO> edgeDTOs) {
+	public void setEdgeDTOs(ArrayList<EdgeDTO> edgeDTOs) {
 		this.edgeDTOs = edgeDTOs;
 	}
 }

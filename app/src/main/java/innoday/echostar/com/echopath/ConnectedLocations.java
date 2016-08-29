@@ -3,12 +3,15 @@ package innoday.echostar.com.echopath;
 /**
  * Created by sheshank.kodam on 5/26/2016.
  */
-public class ConnectedLocations {
+public class ConnectedLocations
+{
     private String id;
+
+    private String distance;
 
     private String created;
 
-    private Direction direction;
+    private String direction;
 
     private String locationId2;
 
@@ -26,6 +29,16 @@ public class ConnectedLocations {
         this.id = id;
     }
 
+    public String getDistance ()
+    {
+        return distance;
+    }
+
+    public void setDistance (String distance)
+    {
+        this.distance = distance;
+    }
+
     public String getCreated ()
     {
         return created;
@@ -36,12 +49,12 @@ public class ConnectedLocations {
         this.created = created;
     }
 
-    public Direction getDirection ()
+    public String getDirection ()
     {
         return direction;
     }
 
-    public void setDirection (Direction direction)
+    public void setDirection (String direction)
     {
         this.direction = direction;
     }
@@ -79,6 +92,6 @@ public class ConnectedLocations {
     @Override
     public String toString()
     {
-        return "ClassPojo [id = "+id+", created = "+created+", direction = "+direction+", locationId2 = "+locationId2+", locationId1 = "+locationId1+", modified = "+modified+"]";
+        return "ClassPojo [id = "+id+", distance = "+distance+", created = "+created+", direction = "+direction+", locationId2 = "+locationId2+", locationId1 = "+locationId1+", modified = "+modified+"]";
     }
 }

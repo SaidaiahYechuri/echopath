@@ -1,136 +1,173 @@
 package innoday.echostar.com.echopath;
 
-/**
- * @author yechsai
- *
- */
-public class EdgeDTO {
+import android.os.Parcel;
+import android.os.Parcelable;
 
-	private String from;
-	
-	private String to; 
-	
-	private double distance;
-	
-	private String face;
+public class EdgeDTO implements Parcelable
+{
+	public EdgeDTO(double fromLatitude, String to, double distance, String face, double fromLongitude, String from, double toLongitude, double toLatitude, String toFace) {
+		super();
+		this.fromLatitude = fromLatitude;
+		this.to = to;
+		this.distance = distance;
+		this.face = face;
+		this.fromLongitude = fromLongitude;
+		this.from = from;
+		this.toLongitude = toLongitude;
+		this.toLatitude = toLatitude;
+		this.toFace = toFace;
+	}
 
-	double toLatitude;
+	public EdgeDTO(){
+		super();
+	}
 
-	double toLongitude;
 
 	double fromLatitude;
 
+	private String to;
+
+	private String face;
+
+	private double distance;
+
 	double fromLongitude;
 
+	private String from;
 
-	/**
-	 * Constructor
-	 */
-	public EdgeDTO(String from, String to, double distance, String face) {
-		super();
-		this.from = from;
-		this.to = to;
-		this.distance = distance;
-		this.face = face;
+	double toLongitude;
+
+	double toLatitude;
+
+	private String toFace;
+
+	public double getFromLatitude ()
+	{
+		return fromLatitude;
 	}
 
-	public EdgeDTO() {
-		// TODO Auto-generated constructor stub
+	public void setFromLatitude (Double fromLatitude)
+	{
+		this.fromLatitude = fromLatitude;
 	}
 
-	public double getToLatitude() {
-		return toLatitude;
-	}
-
-	public void setToLatitude(double toLatitude) {
-		this.toLatitude = toLatitude;
-	}
-
-    public double getToLongitude() {
-        return toLongitude;
-    }
-
-    public void setToLongitude(double toLongitude) {
-        this.toLongitude = toLongitude;
-    }
-
-    public double getFromLatitude() {
-        return fromLatitude;
-    }
-
-    public void setFromLatitude(double fromLatitude) {
-        this.fromLatitude = fromLatitude;
-    }
-
-    public double getFromLongitude() {
-        return fromLongitude;
-    }
-
-    public void setFromLongitude(double fromLongitude) {
-        this.fromLongitude = fromLongitude;
-    }
-
-    /**
-	 * Get the value of from of this EdgeDTO	
-	 * @return the from
-	 */
-	public String getFrom() {
-		return from;
-	}
-
-	/**
-	 * Set value of from  
-	 * @param from the from to set
-	 */
-	public void setFrom(String from) {
-		this.from = from;
-	}
-
-	/**
-	 * Get the value of to of this EdgeDTO	
-	 * @return the to
-	 */
-	public String getTo() {
+	public String getTo ()
+	{
 		return to;
 	}
 
-	/**
-	 * Set value of to  
-	 * @param to the to to set
-	 */
-	public void setTo(String to) {
+	public void setTo (String to)
+	{
 		this.to = to;
 	}
 
-	/**
-	 * Get the value of distance of this EdgeDTO	
-	 * @return the distance
-	 */
-	public double getDistance() {
-		return distance;
-	}
-
-	/**
-	 * Set value of distance  
-	 * @param distance the distance to set
-	 */
-	public void setDistance(double distance) {
-		this.distance = distance;
-	}
-
-	/**
-	 * Get the value of face of this EdgeDTO	
-	 * @return the face
-	 */
-	public String getFace() {
+	public String getFace ()
+	{
 		return face;
 	}
 
-	/**
-	 * Set value of face  
-	 * @param face the face to set
-	 */
-	public void setFace(String face) {
+	public void setFace (String face)
+	{
 		this.face = face;
-	} 
+	}
+
+	public double getDistance ()
+	{
+		return distance;
+	}
+
+	public void setDistance (double distance)
+	{
+		this.distance = distance;
+	}
+
+	public Double getFromLongitude ()
+	{
+		return fromLongitude;
+	}
+
+	public void setFromLongitude (Double fromLongitude)
+	{
+		this.fromLongitude = fromLongitude;
+	}
+
+	public String getFrom ()
+	{
+		return from;
+	}
+
+	public void setFrom (String from)
+	{
+		this.from = from;
+	}
+
+	public Double getToLongitude ()
+	{
+		return toLongitude;
+	}
+
+	public void setToLongitude (Double toLongitude)
+	{
+		this.toLongitude = toLongitude;
+	}
+
+	public Double getToLatitude ()
+	{
+		return toLatitude;
+	}
+
+	public void setToLatitude (Double toLatitude)
+	{
+		this.toLatitude = toLatitude;
+	}
+
+	public String getToFace ()
+	{
+		return toFace;
+	}
+
+	public void setToFace (String toFace)
+	{
+		this.toFace = toFace;
+	}
+
+	public EdgeDTO(Parcel in) {
+		fromLatitude = in.readDouble();
+		to = in.readString();
+		face = in.readString();
+		distance = in.readDouble();
+		fromLongitude = in.readDouble();
+		from = in.readString();
+		toLongitude = in.readDouble();
+		toLatitude = in.readDouble();
+		toFace = in.readString();
+	}
+
+	public static final Parcelable.Creator<EdgeDTO> CREATOR = new Parcelable.Creator<EdgeDTO>() {
+		public EdgeDTO createFromParcel(Parcel in) {
+			return new EdgeDTO(in);
+		}
+
+		@Override
+		public EdgeDTO[] newArray(int size) {
+			return new EdgeDTO[size];
+		}
+	};
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeDouble(fromLatitude);
+		dest.writeString(to);
+		dest.writeString(face);
+		dest.writeDouble(distance);
+		dest.writeDouble(fromLongitude);
+		dest.writeString(from);
+		dest.writeDouble(toLongitude);
+		dest.writeDouble(toLatitude);
+		dest.writeString(toFace);
+	}
 }
