@@ -2,26 +2,16 @@ package innoday.echostar.com.echopath;
 
 import android.app.Activity;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
-import android.os.PersistableBundle;
-import android.support.v7.app.AppCompatActivity;
-import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AbsListView.LayoutParams;
-import android.widget.EditText;
-import android.widget.FrameLayout;
-import android.widget.GridLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.google.android.gms.maps.model.LatLng;
-
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Sheshank.Kodam on 7/4/2016.
@@ -49,7 +39,7 @@ public class ShowDirectionsActivity extends Activity{
 //        String direction = "left";
 
         // Set layout parameters
-        RelativeLayout.LayoutParams params[] = set_layout_parameters(json_len);
+        RelativeLayout.LayoutParams params[] = setLayoutParameters(json_len);
 
         // Set image_view and text_view
         ImageView[] iv = new ImageView[json_len];
@@ -58,24 +48,19 @@ public class ShowDirectionsActivity extends Activity{
         {
             iv[i] = new ImageView(this);
             iv[i].setId(View.generateViewId());
-            if (myList.get(i).getFace().toLowerCase().equals("left")) iv[i].setImageResource(R.drawable.left2);
-            if (myList.get(i).getFace().toLowerCase().equals("right")) {
-                iv[i].setImageResource(R.drawable.right1);
-            }
-            if (myList.get(i).getFace().toLowerCase().equals("straight")) iv[i].setImageResource(R.drawable.straight1);
-            if (myList.get(i).getFace().toLowerCase().equals("u-turn")) iv[i].setImageResource(R.drawable.uturn);
+            if (myList.get(i).getFace().toLowerCase().equals("left")) iv[i].setImageResource(R.drawable.left);
+            if (myList.get(i).getFace().toLowerCase().equals("right")) iv[i].setImageResource(R.drawable.right);
+            if (myList.get(i).getFace().toLowerCase().equals("straight")) iv[i].setImageResource(R.drawable.straight);
+            if (myList.get(i).getFace().toLowerCase().equals("back")) iv[i].setImageResource(R.drawable.back);
+            if (myList.get(i).getFace().toLowerCase().equals("stairs_down")) iv[i].setImageResource(R.drawable.stairs_down);
+            if (myList.get(i).getFace().toLowerCase().equals("stairs_up")) iv[i].setImageResource(R.drawable.stairs_up);
 
             tv[i] = new TextView(this);
             tv[i].setId(View.generateViewId());
-            StringBuilder directionMessages = new StringBuilder(14);
-            directionMessages.append("Take ")
-                    .append(myList.get(i).getFace())
-                    .append(". ")
-                    .append("Go ")
-                    .append(String.valueOf(myList.get(i).getDistance()))
-                    .append("m");
-            tv[i].setText(directionMessages.toString());
-            tv[i].setTextSize(15);
+            String directionMessage = getDirectionsForMessage(myList, i);
+            tv[i].setText(directionMessage);
+            tv[i].setTextSize(13);
+            tv[i].setTypeface(null, Typeface.BOLD);
 
         }
 
@@ -121,7 +106,7 @@ public class ShowDirectionsActivity extends Activity{
         setContentView(scroll);
     }
 
-    RelativeLayout.LayoutParams[] set_layout_parameters(int json_len){
+    RelativeLayout.LayoutParams[] setLayoutParameters(int json_len){
         /**
          * input = json length
          * output = layout params
@@ -134,5 +119,47 @@ public class ShowDirectionsActivity extends Activity{
         }
         return params;
     }
+
+    String getDirectionsForMessage(ArrayList<EdgeDTO> meetingRoomsLocations, int index)
+    {
+        String face = meetingRoomsLocations.get(index).getFace().toLowerCase();
+        String to = meetingRoomsLocations.get(index).getTo().toLowerCase();
+        String text1 = "";
+        String text2 = "";
+        String text3 = "";
+
+        if (face.equals("straight")) {
+            text1 = "Go ";
+        }
+        else text1 = "Take ";
+
+        if (face.equals("stairs_up")) {
+            text2 = "stairs up ";
+        }
+        else if (face.equals("stairs_up")){
+            text2 = "stairs down ";
+        }
+        else text2 = face.toLowerCase()+ " ";
+
+        if (to.contains("intersection")){
+            text3 = "intersection";
+        }
+        else{
+            text3 = to + " ";
+        }
+
+
+        StringBuilder directionMessages = new StringBuilder(14);
+        directionMessages.append(text1)
+                .append(text2)
+                .append("and ")
+                .append("continue ")
+                .append(String.valueOf(meetingRoomsLocations.get(index).getDistance()))
+                .append("m ")
+                .append("to ")
+                .append(text3);
+        return directionMessages.toString();
+    }
+
 }
 
