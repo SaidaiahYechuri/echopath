@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    List<Location> meetingRoomInfo  = new ArrayList<Location>();
     JSONObject fromMeetingRoomObj = new JSONObject();
     JSONObject toMeetingRoomObj = new JSONObject();
     @Override
@@ -59,8 +58,8 @@ public class MainActivity extends AppCompatActivity {
         new HttpRequestTask().execute();
     }
 
-    public void setAdaptor(List<Location> items, JSONObject fromMeetingRoomObj, JSONObject toMeetingRoomObj){
-        Spinner from = (Spinner)findViewById(R.id.from);
+    public void setAdaptor(JSONObject fromMeetingRoomObj, JSONObject toMeetingRoomObj){
+
         JSONArray fromMeetingRoomsArray = fromMeetingRoomObj.names();
         List fromMeetingRooms = new ArrayList();
         for (int i = 0; i < fromMeetingRoomsArray.length(); i++) {
@@ -81,7 +80,8 @@ public class MainActivity extends AppCompatActivity {
             }
 
         }
-//        ArrayAdapter<Location> fromAdapter = new ArrayAdapter<Location>(this,android.R.layout.simple_spinner_dropdown_item,items);
+
+        Spinner from = (Spinner)findViewById(R.id.from);
         ArrayAdapter<String> fromAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_dropdown_item, fromMeetingRooms);
         from.setAdapter(fromAdapter);
 
@@ -109,8 +109,6 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(LocationsDTO locationsDTO) {
-            meetingRoomInfo.clear();
-
             try {
                 fromMeetingRoomObj.put("From?", "");
                 toMeetingRoomObj.put("To?", "");
@@ -123,10 +121,8 @@ public class MainActivity extends AppCompatActivity {
                     toMeetingRoomObj.put(location.getName(), location);
                 }catch (JSONException e) {
                     Log.e("MainActivity", e.getMessage(), e);}
-
-                meetingRoomInfo.add(location);
             }
-            setAdaptor(meetingRoomInfo, fromMeetingRoomObj, toMeetingRoomObj);
+            setAdaptor(fromMeetingRoomObj, toMeetingRoomObj);
         }
 
     }
