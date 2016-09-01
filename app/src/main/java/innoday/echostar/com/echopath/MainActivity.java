@@ -1,41 +1,28 @@
 package innoday.echostar.com.echopath;
 
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.Typeface;
 import android.os.AsyncTask;
-import android.os.Parcelable;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
-import android.widget.TableLayout;
-import android.widget.TableRow;
-import android.widget.TextView;
 
-import com.google.android.gms.maps.model.LatLng;
-
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Serializable;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     List<Location> meetingRoomInfo  = new ArrayList<Location>();
+    JSONObject fromMeetingRoomObj = new JSONObject();
+    JSONObject toMeetingRoomObj = new JSONObject();
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,9 +32,19 @@ public class MainActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Spinner fromSpinner = (Spinner) findViewById(R.id.from);
+                Location fromLocation = new Location();
+                Location toLocation = new Location();
+                try{
+                    fromLocation = (Location) fromMeetingRoomObj.get(fromSpinner.getSelectedItem().toString());
+                } catch (JSONException e){
+                    Log.e("onClick: ", e.getMessage(), e);
+                }
                 Spinner toSpinner = (Spinner) findViewById(R.id.to);
-                Location fromLocation = (Location) fromSpinner.getSelectedItem();
-                Location toLocation = (Location) toSpinner.getSelectedItem();
+                try{
+                    toLocation = (Location) toMeetingRoomObj.get(toSpinner.getSelectedItem().toString());
+                } catch (JSONException e){
+                    Log.e("onClick: ", e.getMessage(), e);
+                }
                 new ShortestDistanceTask(fromLocation, toLocation).execute();
 
             }
@@ -62,13 +59,34 @@ public class MainActivity extends AppCompatActivity {
         new HttpRequestTask().execute();
     }
 
-    public void setAdaptor(List<Location> items){
-
+    public void setAdaptor(List<Location> items, JSONObject fromMeetingRoomObj, JSONObject toMeetingRoomObj){
         Spinner from = (Spinner)findViewById(R.id.from);
-        ArrayAdapter<Location> fromAdapter = new ArrayAdapter<Location>(this,android.R.layout.simple_spinner_dropdown_item,items);
+        JSONArray fromMeetingRoomsArray = fromMeetingRoomObj.names();
+        List fromMeetingRooms = new ArrayList();
+        for (int i = 0; i < fromMeetingRoomsArray.length(); i++) {
+            try {
+                fromMeetingRooms.add(fromMeetingRoomsArray.get(i));
+            }catch (JSONException e){
+                Log.e("setAdaptor: ",e.getMessage(), e);
+            }
+        }
+
+        JSONArray toMeetingRoomsArray = toMeetingRoomObj.names();
+        List toMeetingRooms = new ArrayList();
+        for(int i = 0; i < toMeetingRoomsArray.length(); i++){
+            try{
+                toMeetingRooms.add(toMeetingRoomsArray.get(i));
+            }catch (JSONException e){
+                Log.e("setAdaptor: ",e.getMessage(), e);
+            }
+
+        }
+//        ArrayAdapter<Location> fromAdapter = new ArrayAdapter<Location>(this,android.R.layout.simple_spinner_dropdown_item,items);
+        ArrayAdapter<String> fromAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_dropdown_item, fromMeetingRooms);
         from.setAdapter(fromAdapter);
+
         Spinner to = (Spinner)findViewById(R.id.to);
-        ArrayAdapter<Location> toAdapter = new ArrayAdapter<Location>(this,android.R.layout.simple_spinner_dropdown_item,items);
+        ArrayAdapter<Location> toAdapter = new ArrayAdapter<Location>(this,android.R.layout.simple_spinner_dropdown_item,toMeetingRooms);
         to.setAdapter(toAdapter);
     }
 
@@ -92,10 +110,23 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(LocationsDTO locationsDTO) {
             meetingRoomInfo.clear();
+
+            try {
+                fromMeetingRoomObj.put("From?", "");
+                toMeetingRoomObj.put("To?", "");
+            }catch (JSONException e) {
+                Log.e("MainActivity", e.getMessage(), e);}
+
             for(Location location : locationsDTO.getLocations()){
+                try {
+                    fromMeetingRoomObj.put(location.getName(), location);
+                    toMeetingRoomObj.put(location.getName(), location);
+                }catch (JSONException e) {
+                    Log.e("MainActivity", e.getMessage(), e);}
+
                 meetingRoomInfo.add(location);
             }
-            setAdaptor(meetingRoomInfo);
+            setAdaptor(meetingRoomInfo, fromMeetingRoomObj, toMeetingRoomObj);
         }
 
     }
