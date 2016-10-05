@@ -26,7 +26,7 @@ public class ShowDirectionsActivity extends Activity{
         // Define scroll view
         ScrollView scroll = new ScrollView(this);
         scroll.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-        scroll.setBackgroundColor(Color.parseColor("#fbefeb"));
+        scroll.setBackgroundResource(R.drawable.background);
 
         // Define relative mainLayout
         RelativeLayout mainLayout = new RelativeLayout(this);
@@ -41,7 +41,6 @@ public class ShowDirectionsActivity extends Activity{
         // get meeting room directions from main activity
         Bundle extra = getIntent().getExtras();
         ArrayList<EdgeDTO> meetingRoomDirections = (ArrayList<EdgeDTO>) extra.get("meetingRoomLocationsIntent");
-
 
         addShowMapButton(mainLayout);
         RelativeLayout.LayoutParams params[] = setLayoutParameters(meetingRoomDirections.size());
