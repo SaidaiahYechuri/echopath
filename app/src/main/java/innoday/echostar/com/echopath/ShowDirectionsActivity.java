@@ -140,7 +140,7 @@ public class ShowDirectionsActivity extends Activity{
             textView[direction].setId(View.generateViewId());
             String directionMessage = getDirectionsMessage(meetingRoomDirections, direction);
             textView[direction].setText(directionMessage);
-            textView[direction].setTextSize(13);
+            textView[direction].setTextSize(15);
             textView[direction].setTypeface(null, Typeface.BOLD);
         }
         return textView;

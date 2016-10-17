@@ -18,14 +18,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/from"
-            android:spinnerMode="dropdown" />
+            android:layout_weight="0.05"/>
 
         <Spinner
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/to"
             android:layout_gravity="center_horizontal"
-            android:spinnerMode="dropdown" />
+            android:layout_weight="0.05"/>
 
         <Button
             style="@android:style/Widget.Material.Light.Button.Inset"
