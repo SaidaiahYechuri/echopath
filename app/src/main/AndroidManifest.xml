@@ -38,5 +38,6 @@
         </activity>
 
         <activity android:name=".MapActivity"></activity>
+        <activity android:name=".ShowDirectionsActivity"></activity>
     </application>
 </manifest>
