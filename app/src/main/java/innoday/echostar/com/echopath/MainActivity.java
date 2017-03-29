@@ -61,12 +61,16 @@ public class MainActivity extends AppCompatActivity {
     public void setSpinners(){
         Spinner from = (Spinner)findViewById(R.id.from);
         List fromMeetingRoomNames = getMeetingRoomNames(fromMeetingRoomObj);
-        ArrayAdapter<String> fromAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_dropdown_item, fromMeetingRoomNames);
+        ArrayAdapter<String> fromAdapter = new ArrayAdapter<String>(this,
+                R.layout.spinner_item, fromMeetingRoomNames);
+        fromAdapter.setDropDownViewResource(R.layout.spinner_item);
         from.setAdapter(fromAdapter);
 
         Spinner to = (Spinner)findViewById(R.id.to);
         List toMeetingRoomNames = getMeetingRoomNames(toMeetingRoomObj);
-        ArrayAdapter<Location> toAdapter = new ArrayAdapter<Location>(this,android.R.layout.simple_spinner_dropdown_item, toMeetingRoomNames);
+        ArrayAdapter<Location> toAdapter = new ArrayAdapter<Location>(this,
+                R.layout.spinner_item, toMeetingRoomNames);
+        toAdapter.setDropDownViewResource(R.layout.spinner_item);
         to.setAdapter(toAdapter);
     }
 
@@ -83,12 +87,13 @@ public class MainActivity extends AppCompatActivity {
         return meetingRoomNames;
     }
 
+
     private class HttpRequestTask extends AsyncTask<Void, Void, LocationsDTO> {
 
         @Override
         protected LocationsDTO doInBackground(Void... params) {
             try {
-                final String url = "http://10.73.72.140:8080/echopath/location/locationsOnly";
+                final String url = "http://10.73.172.60:8080/echopath/location/locationsOnly";
 
                 RestTemplate restTemplate = new RestTemplate();
                 restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
@@ -122,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
 
     public class ShortestDistanceTask extends AsyncTask<Void, Void, TempShortestPath> {
 
-        private static final String BASE_URL = "http://10.73.72.140:8080/echopath/location/";
+        private static final String BASE_URL = "http://10.73.172.60:8080/echopath/location/";
         private Location fromLocation;
         private  Location toLocation;
         private TempShortestPath shortestPathDTO = new TempShortestPath();

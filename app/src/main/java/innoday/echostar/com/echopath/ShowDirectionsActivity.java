@@ -1,11 +1,13 @@
 package innoday.echostar.com.echopath;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AbsListView.LayoutParams;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
@@ -24,24 +26,32 @@ public class ShowDirectionsActivity extends Activity{
         // Define scroll view
         ScrollView scroll = new ScrollView(this);
         scroll.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-        scroll.setBackgroundColor(Color.parseColor("#fbefeb"));
+        scroll.setBackgroundResource(R.drawable.background);
 
-        // Define relative layout
-        RelativeLayout layout = new RelativeLayout(this);
-        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-        layout.setLayoutParams(layoutParams);
+        // Define relative mainLayout
+        RelativeLayout mainLayout = new RelativeLayout(this);
+        RelativeLayout.LayoutParams mainLayoutParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        mainLayout.setLayoutParams(mainLayoutParams);
+
+        // Define relative mainLayout
+        RelativeLayout directionsViewLayout = new RelativeLayout(this);
+        RelativeLayout.LayoutParams directionsLayoutParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        directionsViewLayout.setLayoutParams(directionsLayoutParams);
 
         // get meeting room directions from main activity
         Bundle extra = getIntent().getExtras();
         ArrayList<EdgeDTO> meetingRoomDirections = (ArrayList<EdgeDTO>) extra.get("meetingRoomLocationsIntent");
 
+        addShowMapButton(mainLayout);
         RelativeLayout.LayoutParams params[] = setLayoutParameters(meetingRoomDirections.size());
         ImageView[] iv = setImages(meetingRoomDirections);
         TextView[] tv = setdirectionText(meetingRoomDirections);
         alignViews(params, meetingRoomDirections, iv, tv);
-        addViews(layout, params, meetingRoomDirections, iv, tv);
-        scroll.addView(layout);
-        setContentView(scroll);
+        addViews(directionsViewLayout, params, meetingRoomDirections, iv, tv);
+        scroll.addView(directionsViewLayout);
+        mainLayout.addView(scroll);
+        setContentView(mainLayout);
+
     }
 
     RelativeLayout.LayoutParams[] setLayoutParameters(int meetingRoomDirectionsSize){
@@ -130,7 +140,7 @@ public class ShowDirectionsActivity extends Activity{
             textView[direction].setId(View.generateViewId());
             String directionMessage = getDirectionsMessage(meetingRoomDirections, direction);
             textView[direction].setText(directionMessage);
-            textView[direction].setTextSize(13);
+            textView[direction].setTextSize(15);
             textView[direction].setTypeface(null, Typeface.BOLD);
         }
         return textView;
@@ -171,6 +181,26 @@ public class ShowDirectionsActivity extends Activity{
                 textViewCounter += 1;
             }
         }
+    }
+
+    void addShowMapButton(RelativeLayout mainLayout){
+        Button showMapButton = new Button(this);
+        showMapButton.setBackgroundResource(R.drawable.sm);
+        showMapButton.setId(View.generateViewId());
+        RelativeLayout.LayoutParams lp =
+                new RelativeLayout.LayoutParams(
+                        LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        lp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+        lp.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        mainLayout.addView(showMapButton, lp);
+
+        showMapButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent showLayoutImageIntent = new Intent(v.getContext(), ShowLayoutImageActivity.class);
+                startActivity(showLayoutImageIntent);
+
+            }
+        });
     }
 
 }
