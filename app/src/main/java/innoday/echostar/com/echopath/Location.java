@@ -18,6 +18,10 @@ public class Location
 
 	private String latitude;
 
+	private Boolean active;
+
+	private String locationType;
+
 	private String modified;
 
 	private ConnectedLocations[] connectedLocations;
@@ -111,6 +115,26 @@ public class Location
 	{
 		this.modified = modified;
 	}
+
+    public Boolean getActive ()
+    {
+        return active;
+    }
+
+    public void setActive (Boolean active)
+    {
+        this.active = active;
+    }
+
+    public String getLocationType ()
+    {
+        return locationType;
+    }
+
+    public void setLocationType (String locationType)
+    {
+        this.locationType = locationType;
+    }
 
 	public ConnectedLocations[] getConnectedLocations ()
 	{

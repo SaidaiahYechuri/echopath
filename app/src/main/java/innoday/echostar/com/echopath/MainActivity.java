@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected LocationsDTO doInBackground(Void... params) {
             try {
-                final String url = "http://10.73.172.60:8080/echopath/location/locationsOnly";
+                final String url = "http://34.210.6.35:8080/echopath/location/locationsOnly";
 
                 RestTemplate restTemplate = new RestTemplate();
                 restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
@@ -127,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
 
     public class ShortestDistanceTask extends AsyncTask<Void, Void, TempShortestPath> {
 
-        private static final String BASE_URL = "http://10.73.172.60:8080/echopath/location/";
+        private static final String BASE_URL = "http://34.210.6.35:8080/echopath/location/";
         private Location fromLocation;
         private  Location toLocation;
         private TempShortestPath shortestPathDTO = new TempShortestPath();

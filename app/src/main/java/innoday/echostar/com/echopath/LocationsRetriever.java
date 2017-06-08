@@ -8,7 +8,7 @@ import org.springframework.web.client.RestTemplate;
  */
 public class LocationsRetriever {
     public static LocationsDTO getLcoationsDTO(){
-        final String url = "htp://110.73.172.60:8080/echopath/location/locationsOnly";
+        final String url = "htp://34.210.6.35:8080/echopath/location/locationsOnly";
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
         LocationsDTO locationsDTO = restTemplate.getForObject(url, LocationsDTO.class);
