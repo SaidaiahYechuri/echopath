@@ -113,10 +113,18 @@ public class MainActivity extends AppCompatActivity {
             }catch (JSONException e) {
                 Log.e("MainActivity", e.getMessage(), e);}
 
+            Location restRoom = new Location();
+            restRoom.setId("123");
+            restRoom.setName("RESTROOM");
+
             for(Location location : locationsDTO.getLocations()){
                 try {
                     fromMeetingRoomObj.put(location.getName(), location);
                     toMeetingRoomObj.put(location.getName(), location);
+
+                    if (!toMeetingRoomObj.has("RESTROOM")){
+                        toMeetingRoomObj.put("RESTROOM", restRoom);
+                    }
                 }catch (JSONException e) {
                     Log.e("MainActivity", e.getMessage(), e);}
             }
@@ -146,11 +154,23 @@ public class MainActivity extends AppCompatActivity {
                 restOperations.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
 
 
-                if (fromLocation != null && toLocation != null) {
-                    shortestPathDTO = restOperations.getForObject(BASE_URL
-                            + "shortestPath?fromID=" + fromLocation.getId() + "&toID="
-                            + toLocation.getId(), TempShortestPath.class);
+
+
+                if(toLocation.getName().equals("RESTROOM")){
+                    if (fromLocation != null && toLocation != null) {
+                        shortestPathDTO = restOperations.getForObject(BASE_URL
+                                + "type?fromID=" + fromLocation.getId() + "&type="
+                                + toLocation.getName(), TempShortestPath.class);
+                    }
+                }else{
+                    if (fromLocation != null && toLocation != null) {
+                        shortestPathDTO = restOperations.getForObject(BASE_URL
+                                + "shortestPath?fromID=" + fromLocation.getId() + "&toID="
+                                + toLocation.getId(), TempShortestPath.class);
+                    }
                 }
+
+
 
             } catch (Throwable e) {
                 Log.e("MainActivity", e.getMessage(), e);
